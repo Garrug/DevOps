@@ -10,3 +10,20 @@ jobs:
     steps:
       - name: Hello World
         run: echo "Hello World!"
+
+jobs:
+  nom:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Nom 
+        run: echo "${{ github.actor }}"
+
+jobs:
+  mail:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Mail
+        run: echo "Mail Mail Mail!"
+  
