@@ -1,30 +1,29 @@
 name: Hello World
 
-on: [push]
+on:
+  push:
 
 jobs:
   nom:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Nom 
-        run: echo "${{ github.actor }}"
+      - name: Afficher le nom
+        run: echo "Nom : $NOM"
+        env:
+          NOM: ${{ vars.NOM }}
 
-jobs:
-  hello:
+  prenom:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Hello World
-        run: echo "Hello World!"
+      - name: Afficher le prénom
+        run: echo "Prénom : $PRENOM"
+        env:
+          PRENOM: ${{ vars.PRENOM }}
 
-
-
-jobs:
-  mail:
+  email:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Mail
-        run: echo "Mail"
-  
+      - name: Afficher l'email
+        run: echo "Email : $EMAIL"
+        env:
+          EMAIL: ${{ vars.EMAIL }}
