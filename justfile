@@ -5,7 +5,7 @@ git:
     git init
     git add .
     git commit -m "blabla"
-    git remote add origin git@gitserver:user/Garrug/project.git
+    git remote add origin git@gitserver:Garrug/project.git
     git push origin master
 
 hello:
