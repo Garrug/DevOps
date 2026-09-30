@@ -21,3 +21,9 @@ jobs:
     steps:
       - name: Afficher l'email
         run: echo "Email ${{ vars.EMAIL }}"
+
+  py:
+    runs-on:python-latest
+    steps:
+      - name: script python
+        run: print("Commit ok !")
