@@ -1,15 +1,6 @@
 name: Hello World
 
-on:
-  push:
-
-jobs:
-  hello:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Hello World
-        run: echo "Hello World!"
+on: [push]
 
 jobs:
   nom:
@@ -20,10 +11,20 @@ jobs:
         run: echo "${{ github.actor }}"
 
 jobs:
+  hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Hello World
+        run: echo "Hello World!"
+
+
+
+jobs:
   mail:
     runs-on: ubuntu-latest
 
     steps:
       - name: Mail
-        run: echo "Mail Mail Mail!"
+        run: echo "Mail"
   
