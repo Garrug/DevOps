@@ -26,4 +26,4 @@ jobs:
     runs-on: python-latest
     steps:
       - name: script python
-        run: python -c "print('Hello World')"
+        run: python script.py
