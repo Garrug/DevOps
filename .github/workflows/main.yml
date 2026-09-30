@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Afficher le nom
-        run: echo "Nom : ${{ vars.NOM }}"
+        run: echo "Nom  ${{ vars.NOM }}"
 
   prenom:
     runs-on: ubuntu-latest
