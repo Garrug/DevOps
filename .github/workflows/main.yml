@@ -26,4 +26,4 @@ jobs:
     runs-on: python-latest
     steps:
       - name: script python
-        run: print("Commit ok !")
+        run: python -c "print('Hello World')"
