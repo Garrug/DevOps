@@ -1,8 +1,7 @@
-name: Hello World
+name: Hello W
 
 on:
   push:
-
 jobs:
   nom:
     runs-on: ubuntu-latest
