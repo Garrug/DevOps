@@ -12,7 +12,6 @@ jobs:
       pair: ${{ steps.calcul.outputs.pair }}
 
     steps:
-      
       - name: Division dans Dev
         id: calcul
         run: |
@@ -22,51 +21,50 @@ jobs:
           echo "Résultat Dev : $RESULTAT"
 
           echo "resultat=$RESULTAT" >> "$GITHUB_OUTPUT"
+
           if (( RESULTAT % 2 == 0 )); then
             echo "pair=true" >> "$GITHUB_OUTPUT"
           else
             echo "pair=false" >> "$GITHUB_OUTPUT"
           fi
 
-    val:
-        needs: dev
-        if: needs.dev.outputs.pair == 'true'
+  val:
+    needs: dev
+    if: needs.dev.outputs.pair == 'true'
 
-        runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-        outputs:
-          resultat: ${{ steps.calcul.outputs.resultat }}
-          pair: ${{ steps.calcul.outputs.pair }}
+    outputs:
+      resultat: ${{ steps.calcul.outputs.resultat }}
+      pair: ${{ steps.calcul.outputs.pair }}
 
-        steps:
-          
-          - name: Division dans Val
-            id: calcul
-            run: |
-                  RESULTAT=${{ needs.dev.outputs.resultat }}
-                  RESULTAT=$((RESULTAT / 4))
+    steps:
+      - name: Division dans Val
+        id: calcul
+        run: |
+          RESULTAT=${{ needs.dev.outputs.resultat }}
+          RESULTAT=$((RESULTAT / 4))
 
-                    echo "Résultat Val : $RESULTAT"
+          echo "Résultat Val : $RESULTAT"
 
-                    echo "resultat=$RESULTAT" >> "$GITHUB_OUTPUT"
+          echo "resultat=$RESULTAT" >> "$GITHUB_OUTPUT"
 
-                    if (( RESULTAT % 2 == 0 )); then
-                      echo "pair=true" >> "$GITHUB_OUTPUT"
-                    else
-                      echo "pair=false" >> "$GITHUB_OUTPUT"
-                    fi
+          if (( RESULTAT % 2 == 0 )); then
+            echo "pair=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pair=false" >> "$GITHUB_OUTPUT"
+          fi
 
-    prod:
-        needs: val
-        if: needs.val.outputs.pair == 'true'
+  prod:
+    needs: val
+    if: needs.val.outputs.pair == 'true'
 
-        runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-        steps:
-          
-        - name: Division dans Prod
-          run: |
-                RESULTAT=${{ needs.val.outputs.resultat }}
-                RESULTAT=$((RESULTAT / 8))
+    steps:
+      - name: Division dans Prod
+        run: |
+          RESULTAT=${{ needs.val.outputs.resultat }}
+          RESULTAT=$((RESULTAT / 8))
 
-                  echo "Résultat Prod : $RESULTAT"
+          echo "Résultat Prod : $RESULTAT"
