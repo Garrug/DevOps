@@ -7,3 +7,13 @@ git:
     git commit -m "blabla"
     git remote add origin git@gitserver:user/Garrug/project.git
     git push origin master
+
+hello:
+    echo "hello world !"
+
+status:
+    git status
+
+add:
+    git add .
+
