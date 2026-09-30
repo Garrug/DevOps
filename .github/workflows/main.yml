@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Afficher le nom
+      
         run: echo "Nom : $NOM"
         env:
           NOM: ${{ vars.NOM }}
