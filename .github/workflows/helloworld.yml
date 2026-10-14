@@ -12,21 +12,18 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Prepare website
+        run: |
+          mkdir public
+          cp HelloWorld.html public/index.html
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -34,7 +31,7 @@ jobs:
       - name: Upload HTML files
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './helloworld.html'
+          path: './public'
 
       - name: Deploy to GitHub Pages
         id: deployment
