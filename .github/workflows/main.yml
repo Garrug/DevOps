@@ -2,6 +2,8 @@ name: Hello W
 
 on:
   push:
+    branches:
+        - master
 
 jobs:
   nom:
