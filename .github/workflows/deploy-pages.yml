@@ -1,10 +1,10 @@
 
-name: Deploy Hello World to GitHub Pages
+name: Extract and Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 permissions:
@@ -13,28 +13,56 @@ permissions:
   id-token: write
 
 jobs:
-  lint:
-    name: Lint HTML
+
+  # Job 1 : Extract HTML from Docker image
+  extract-html:
+    name: Extract HTML from Docker
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      # Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          node-version: 22
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Install HTMLHint
-        run: npm install --global htmlhint
+      # Download Docker image
+      - name: Pull Docker image
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops-helloworld:latest
 
-      - name: Lint HTML file
-        run: htmlhint test.html
+      # Create temporary container
+      - name: Create temporary container
+        run: |
+          docker create --name html-container \
+            ${{ secrets.DOCKERHUB_USERNAME }}/devops-helloworld:latest
 
+      # Extract HTML file
+      - name: Extract HTML file
+        run: |
+          mkdir public
+          docker cp html-container:/usr/share/nginx/html/index.html public/index.html
+
+      # Remove temporary container
+      - name: Remove temporary container
+        run: |
+          docker rm html-container
+
+      # Upload extracted HTML as artifact
+      - name: Upload HTML artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './public'
+
+  # Job 2 : Deploy to GitHub Pages
   deploy:
     name: Deploy to GitHub Pages
-    needs: lint
+    needs: extract-html
     runs-on: ubuntu-latest
 
     environment:
@@ -42,50 +70,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Prepare website
-        run: |
-          mkdir public
-          cp test.html public/index.html
-
+      # Configure GitHub Pages
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload HTML files
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './public'
-
+      # Deploy website
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-
-  docker-publish:
-    name: Build and Push Docker Image
-    needs: lint
-    runs-on: ubuntu-latest
-
-    steps:
-      # Récupération du code source
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Connexion à Docker Hub
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # Construction et publication de l'image
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops:latest
-
