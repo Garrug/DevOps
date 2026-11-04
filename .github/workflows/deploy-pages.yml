@@ -34,13 +34,13 @@ jobs:
       # Download Docker image
       - name: Pull Docker image
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops-helloworld:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops:latest
 
       # Create temporary container
       - name: Create temporary container
         run: |
           docker create --name html-container \
-            ${{ secrets.DOCKERHUB_USERNAME }}/devops-helloworld:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/devops:latest
 
       # Extract HTML file
       - name: Extract HTML file
